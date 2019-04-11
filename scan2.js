@@ -21,12 +21,10 @@ function scan() {
   const url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=backlinks&bllimit=500&bltitle=' + page;
   const links = new Set();
   fetchPage(url, links).then(() => {
-    const anchors = document.evaluate("//div[@role='main']//a", document, null, XPathResult.ANY_TYPE, null);
-    while (true) {
-      const anchor = anchors.iterateNext();
-      if (!anchor) {
-        break;
-      }
+    const anchors = document.evaluate(
+        "//div[@role='main']//a", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    for (let i = 0, length = anchors.snapshotLength; i < length; ++i) {
+      const anchor = anchors.snapshotItem(i);
       if (anchor.origin === document.location.origin && anchor.pathname !== document.location.pathname && !anchor.search
           && !anchor.pathname.includes('Wikipedia:') && !anchor.pathname.includes('Help:')) {
         const page2 = decodeURIComponent(anchor.pathname.replace('/wiki/', '').split('_').join(' '));
