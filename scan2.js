@@ -31,7 +31,7 @@ function getInLinks(page, links) {
 
 function getCanonical(page) {
   return fetch('https://en.wikipedia.org/w/api.php?action=query&redirects&limit=1&format=json&titles=' + page)
-      .then(response => response.json()).then(data => data.query.redirects[0].to);
+      .then(response => response.json()).then(data => data.query.redirects ? data.query.redirects[0].to : '');
 }
 
 function scan() {
